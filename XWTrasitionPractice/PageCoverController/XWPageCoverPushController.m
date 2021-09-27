@@ -47,6 +47,7 @@
     UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"返回22" style:UIBarButtonItemStylePlain target:self action:@selector(backToRoot)];
     self.navigationItem.leftBarButtonItem = back;
 }
+#pragma mark - 此处验证多页面返回
 - (void)backToRoot
 {
 //    self.navigationController.delegate = nil;
