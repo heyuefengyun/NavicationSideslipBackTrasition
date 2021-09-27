@@ -137,7 +137,7 @@
 
 
 
-
+#pragma mark - _isTransitioning 此处来自百度FDFullscreenPopGesture<https://github.com/forkingdog/FDFullscreenPopGesture>
 - (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer
 {
     // Ignore when no view controller is pushed into the navigation stack.
