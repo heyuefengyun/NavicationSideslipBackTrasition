@@ -8,9 +8,9 @@
 
 #import "XWInteractiveTransition.h"
 
-@interface XWInteractiveTransition ()
+@interface XWInteractiveTransition ()<UIGestureRecognizerDelegate>
 
-@property (nonatomic, weak) UIViewController *vc;
+@property (nonatomic, weak) UINavigationController *vc;
 /**手势方向*/
 @property (nonatomic, assign) XWInteractiveTransitionGestureDirection direction;
 /**手势类型*/
@@ -33,8 +33,9 @@
     return self;
 }
 
-- (void)addPanGestureForViewController:(UIViewController *)viewController{
+- (void)addPanGestureForViewController:(UINavigationController *)viewController{
     UIPanGestureRecognizer *pan = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
+    pan.delegate = self;
     self.vc = viewController;
     [viewController.view addGestureRecognizer:pan];
 }
@@ -109,9 +110,7 @@
             [_vc dismissViewControllerAnimated:YES completion:nil];
             break;
         case XWInteractiveTransitionTypePush:{
-            if (_pushConifg) {
-                _pushConifg();
-            }
+           
         }
             break;
         case XWInteractiveTransitionTypePop:
@@ -124,9 +123,54 @@
 //                NSLog(@"1111111111111111111111111111");
 //                return;
 //            }
-            NSLog(@"22222222222");
-            [_vc.navigationController popViewControllerAnimated:YES];
+            
+            if (_vc.viewControllers.count > 1) {
+                NSLog(@"22222222222");
+                [_vc popViewControllerAnimated:YES];
+            }else {
+                
+            }
+           
             break;
     }
+}
+
+
+
+
+- (BOOL)gestureRecognizerShouldBegin:(UIPanGestureRecognizer *)gestureRecognizer
+{
+    // Ignore when no view controller is pushed into the navigation stack.
+    if (self.vc.viewControllers.count <= 1) {
+        return NO;
+    }
+    
+//    // Ignore when the active view controller doesn't allow interactive pop.
+//    UIViewController *topViewController = self.navigationController.viewControllers.lastObject;
+//    if (topViewController.fd_interactivePopDisabled) {
+//        return NO;
+//    }
+//
+//    // Ignore when the beginning location is beyond max allowed initial distance to left edge.
+//    CGPoint beginningLocation = [gestureRecognizer locationInView:gestureRecognizer.view];
+//    CGFloat maxAllowedInitialDistance = topViewController.fd_interactivePopMaxAllowedInitialDistanceToLeftEdge;
+//    if (maxAllowedInitialDistance > 0 && beginningLocation.x > maxAllowedInitialDistance) {
+//        return NO;
+//    }
+
+    // Ignore pan gesture when the navigation controller is currently in transition.
+    if ([[self.vc valueForKey:@"_isTransitioning"] boolValue]) {
+        return NO;
+    }
+    
+    // Prevent calling the handler when the gesture begins in an opposite direction.
+    CGPoint translation = [gestureRecognizer translationInView:gestureRecognizer.view];
+    BOOL isLeftToRight = [UIApplication sharedApplication].userInterfaceLayoutDirection == UIUserInterfaceLayoutDirectionLeftToRight;
+    CGFloat multiplier = isLeftToRight ? 1 : - 1;
+    if ((translation.x * multiplier) <= 0) {
+        return NO;
+    }
+    
+    return YES;
 }
 @end

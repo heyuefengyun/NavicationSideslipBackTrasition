@@ -8,9 +8,17 @@
 
 #import <UIKit/UIKit.h>
 
+
+@protocol NavcPushControllerDelegate <NSObject>
+
+- (id<UIViewControllerInteractiveTransitioning>)interactiveTransitionForPush;
+
+@end
+
 @interface AppDelegate : UIResponder <UIApplicationDelegate>
 
 @property (strong, nonatomic) UIWindow *window;
+@property (nonatomic, assign) id<NavcPushControllerDelegate> delegate;
 
 
 @end

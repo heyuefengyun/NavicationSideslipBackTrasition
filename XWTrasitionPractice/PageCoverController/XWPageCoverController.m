@@ -11,8 +11,7 @@
 #import "XWInteractiveTransition.h"
 #import "Masonry.h"
 
-@interface XWPageCoverController ()<XWPageCoverPushControllerDelegate>
-@property (nonatomic, strong) XWInteractiveTransition *interactiveTransitionPush;
+@interface XWPageCoverController ()
 @end
 
 @implementation XWPageCoverController
@@ -33,32 +32,18 @@
         make.centerX.mas_equalTo(self.view.mas_centerX);
         make.top.equalTo(self.view.mas_top).offset(174);
     }];
-    _interactiveTransitionPush = [XWInteractiveTransition interactiveTransitionWithTransitionType:XWInteractiveTransitionTypePush GestureDirection:XWInteractiveTransitionGestureDirectionLeft];
-    typeof(self)weakSelf = self;
-    _interactiveTransitionPush.pushConifg = ^(){
-        [weakSelf push];
-    };
-    //此处传入self.navigationController， 不传入self，因为self.view要形变，否则手势百分比算不准确；
-    [_interactiveTransitionPush addPanGestureForViewController:self];
+    
     UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"返回" style:UIBarButtonItemStylePlain target:self action:@selector(backToRoot)];
     self.navigationItem.leftBarButtonItem = back;
 }
 
 - (void)backToRoot
 {
-    self.navigationController.delegate = nil;
     [self.navigationController popViewControllerAnimated:YES];
 }
 
 - (void)push{
     XWPageCoverPushController *pushVC = [XWPageCoverPushController new];
-    self.navigationController.delegate = pushVC;
-    pushVC.delegate = self;
     [self.navigationController pushViewController:pushVC animated:YES];
 }
-
-- (id<UIViewControllerInteractiveTransitioning>)interactiveTransitionForPush{
-    return _interactiveTransitionPush;
-}
-
 @end

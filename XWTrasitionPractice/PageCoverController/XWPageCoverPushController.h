@@ -8,14 +8,8 @@
 
 #import <UIKit/UIKit.h>
 
-@protocol XWPageCoverPushControllerDelegate <NSObject>
-
-- (id<UIViewControllerInteractiveTransitioning>)interactiveTransitionForPush;
-
-@end
 
 @interface XWPageCoverPushController : UIViewController<UINavigationControllerDelegate>
 
-@property (nonatomic, assign) id<XWPageCoverPushControllerDelegate> delegate;
 
 @end

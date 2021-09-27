@@ -12,8 +12,6 @@
 #import "Masonry.h"
 
 @interface XWPageCoverPushController ()
-@property (nonatomic, strong) XWInteractiveTransition *interactiveTransitionPop;
-@property (nonatomic, assign) UINavigationControllerOperation operation;
 @end
 
 @implementation XWPageCoverPushController
@@ -38,12 +36,7 @@
         make.centerX.mas_equalTo(self.view.mas_centerX);
         make.top.equalTo(self.view.mas_top).offset(104);
     }];
-    //初始化手势过渡的代理
-    _interactiveTransitionPop = [XWInteractiveTransition interactiveTransitionWithTransitionType:XWInteractiveTransitionTypePop GestureDirection:XWInteractiveTransitionGestureDirectionRight];
-    //给当前控制器的视图添加手势
-    [_interactiveTransitionPop addPanGestureForViewController:self];
-    
-    
+
     UIBarButtonItem *back = [[UIBarButtonItem alloc] initWithTitle:@"返回22" style:UIBarButtonItemStylePlain target:self action:@selector(backToRoot)];
     self.navigationItem.leftBarButtonItem = back;
 }
@@ -58,20 +51,7 @@
 }
 
 
-- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC{
-    _operation = operation;
-    //分pop和push两种情况分别返回动画过渡代理相应不同的动画操作
-    return [XWPageCoverTransition transitionWithType:operation == UINavigationControllerOperationPush ? XWPageCoverTransitionTypePush : XWPageCoverTransitionTypePop];
-}
 
-- (id<UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController interactionControllerForAnimationController:(id<UIViewControllerAnimatedTransitioning>)animationController{
-    if (_operation == UINavigationControllerOperationPush) {
-        XWInteractiveTransition *interactiveTransitionPush = [_delegate interactiveTransitionForPush];
-        return interactiveTransitionPush.interation ? interactiveTransitionPush : nil;
-    }else{
-        return _interactiveTransitionPop.interation ? _interactiveTransitionPop : nil;
-    }
-}
 
 
 

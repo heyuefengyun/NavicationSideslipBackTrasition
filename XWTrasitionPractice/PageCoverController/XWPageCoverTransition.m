@@ -94,6 +94,7 @@
         fromVC.view.frame = CGRectMake([UIScreen mainScreen].bounds.size.width, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
         toVC.view.frame =  CGRectMake(0, 0, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
     } completion:^(BOOL finished) {
+        NSLog(@"动画完成");
 #pragma mark - 此处根据手势完成取消做相应处理
         if (transitionContext.transitionWasCancelled) {
             [transitionContext cancelInteractiveTransition];

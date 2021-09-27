@@ -7,15 +7,24 @@
 //
 
 #import "AppDelegate.h"
-
-@interface AppDelegate ()
-
+#import "XWInteractiveTransition.h"
+#import "XWPageCoverTransition.h"
+#import "Masonry.h"
+#import "RootViewController.h"
+@interface AppDelegate ()<UINavigationControllerDelegate>
+@property (nonatomic, strong) XWInteractiveTransition *interactiveTransitionPop;
+@property (nonatomic, assign) UINavigationControllerOperation operation;
+@property (nonatomic, strong) UINavigationController *navc;
 @end
 
 @implementation AppDelegate
 
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+    _window = [[UIWindow alloc]initWithFrame:[UIScreen mainScreen].bounds];
+    _window.rootViewController = self.navc;
+    [_window makeKeyAndVisible];
+    [self configTransition];
     // Override point for customization after application launch.
     return YES;
 }
@@ -40,6 +49,33 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+- (id<UIViewControllerAnimatedTransitioning>)navigationController:(UINavigationController *)navigationController animationControllerForOperation:(UINavigationControllerOperation)operation fromViewController:(UIViewController *)fromVC toViewController:(UIViewController *)toVC{
+    _operation = operation;
+    //分pop和push两种情况分别返回动画过渡代理相应不同的动画操作
+    return [XWPageCoverTransition transitionWithType:operation == UINavigationControllerOperationPush ? XWPageCoverTransitionTypePush : XWPageCoverTransitionTypePop];
+}
+
+- (id<UIViewControllerInteractiveTransitioning>)navigationController:(UINavigationController *)navigationController interactionControllerForAnimationController:(id<UIViewControllerAnimatedTransitioning>)animationController{
+    if (_operation == UINavigationControllerOperationPush) {
+        XWInteractiveTransition *interactiveTransitionPush = [_delegate interactiveTransitionForPush];
+        return interactiveTransitionPush.interation ? interactiveTransitionPush : nil;
+    }else{
+        return _interactiveTransitionPop.interation ? _interactiveTransitionPop : nil;
+    }
+}
+- (void)configTransition {
+    //初始化手势过渡的代理
+    _interactiveTransitionPop = [XWInteractiveTransition interactiveTransitionWithTransitionType:XWInteractiveTransitionTypePop GestureDirection:XWInteractiveTransitionGestureDirectionRight];
+    //给当前控制器的视图添加手势
+    [_interactiveTransitionPop addPanGestureForViewController:self.navc];
+}
+- (UINavigationController *)navc {
+    if (!_navc) {
+        _navc = [[UINavigationController alloc]initWithRootViewController:[[RootViewController alloc] init] ];
+        _navc.delegate = self;
+    }
+    return _navc;
 }
 
 @end

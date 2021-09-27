@@ -30,7 +30,6 @@ typedef NS_ENUM(NSUInteger, XWInteractiveTransitionType) {//手势控制哪种�
 /**促发手势present的时候的config，config中初始化并present需要弹出的控制器*/
 @property (nonatomic, copy) GestureConifg presentConifg;
 /**促发手势push的时候的config，config中初始化并push需要弹出的控制器*/
-@property (nonatomic, copy) GestureConifg pushConifg;
 
 //初始化方法
 
@@ -38,5 +37,5 @@ typedef NS_ENUM(NSUInteger, XWInteractiveTransitionType) {//手势控制哪种�
 - (instancetype)initWithTransitionType:(XWInteractiveTransitionType)type GestureDirection:(XWInteractiveTransitionGestureDirection)direction;
 
 /** 给传入的控制器添加手势*/
-- (void)addPanGestureForViewController:(UIViewController *)viewController;
+- (void)addPanGestureForViewController:(UINavigationController *)viewController;
 @end
