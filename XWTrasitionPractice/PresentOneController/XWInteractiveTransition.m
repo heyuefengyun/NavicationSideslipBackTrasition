@@ -115,6 +115,7 @@
         }
             break;
         case XWInteractiveTransitionTypePop:
+#pragma mark - 此处满足侧滑返回出现弹窗需求  比如退出编辑页  点返回和侧滑返回都弹出弹窗
 //            if ([self.vc isKindOfClass:NSClassFromString(@"XWPageCoverPushController")]) {
 //                self.interation = NO;
 //                UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"提示" message:@"1111" delegate:self cancelButtonTitle:@"确定" otherButtonTitles:nil, nil];
